@@ -2,8 +2,6 @@
 
 ## Writeup Template
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
 ---
 
 **Finding Lane Lines on the Road**
@@ -23,23 +21,23 @@ The goals / steps of this project are the following:
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My original pipeline consisted of 8 steps. 
+My pipeline consisted of 8 steps. 
 
-First, I set all global parameters used in following function at the beginning.
+* First, I set all global parameters used in following function at the beginning.
 
-Notably, it's important to put both image.shape and the calculation of vertices for roi in the process_img function. (Point 1)
-Because the roi region need to change dynamically accordingly to the resolution of input image.
+**Notably, it's important to put both image.shape and the calculation of vertices for roi in the process_img function.
+Because the roi region need to change dynamically accordingly to the resolution of input image.**
 
-Then I convert the color space of original image from RGB to GRAYSCALE.
-And then do guassian blur to reduce noise.
-After that the canny algorithm come in to extract edges according two thresholds.
+* Then I convert the color space of original image from RGB to GRAYSCALE. (Or to the particular range of our color select).
+* Do guassian blur to reduce noise.
+* After that the canny algorithm come in to extract edges according two thresholds.
 
-Notably, I was once try to split roi before do other matrix manipulations like blur or canny, but it seems like the canny algo will extract the edge of roi borders.
+**Notably, I was once try to split roi before do other matrix manipulations like blur or canny, but it seems like the canny algo will extract the edge of roi borders.**
 
 
-After selecting roi, It is time to draw line on it!
+* After selecting roi, It is time to draw line on it!
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by
+*** In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ***
 
 (1) first, seperate points into two collections, point_in_positive_slope and point_in_negative_slope
 
@@ -58,7 +56,7 @@ two y coordinate are:
   (a) first y is at the botton of image 
   (b) second y times 0.6 from first y
 
-After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
+* After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
 
 If you'd like to include images to show how the pipeline works, here is how to include an image: 
 

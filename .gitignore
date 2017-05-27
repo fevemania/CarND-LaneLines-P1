@@ -1,0 +1,21 @@
+# Executables
+*
+!*/
+!*.*
+
+*.exe
+*.out
+*.app
+
+# Mac system file
+.DS_Store
+
+# temperatory file
+*.swp
+*~
+
+# the file would be automatically produced by CMakeList.txt
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile

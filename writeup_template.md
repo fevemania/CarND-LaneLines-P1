@@ -18,6 +18,10 @@ The goals / steps of this project are the following:
 [image3]: ./demo/roi_before_canny_2.jpg
 [image4]: ./demo/roi_after_canny_1.jpg
 [image5]: ./demo/roi_after_canny_2.jpg
+[image6]: ./demo/apply_grayscale_1.jpg
+[image7]: ./demo/apply_grayscale_2.jpg
+[image8]: ./demo/apply_color_select_1.jpg
+[image9]: ./demo/apply_color_select_2.jpg
 
 ---
 
@@ -33,8 +37,8 @@ The goals / steps of this project are the following:
 Because the roi region should change according to the resolution of input image; for instance, test_image and previous two video both are 960*540, but
 challenge.mp4 is 1280*720**
 
-    color_edges = np.dstack((edges, edges, edges))
-    return weighted_img(edges_with_lines, img)
+    color_roi = np.dstack((roi, roi, roi))
+    return weighted_img(edges_with_lines, color_roi)
 
 (2) Then I convert the color space of original image from RGB to GRAYSCALE. (Or to the particular range of our color select).
 
@@ -77,20 +81,20 @@ two y coordinate are:
 
 (6) After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-
 <!--![alt text][image1]-->
-
 
 
 ### 2. Identify potential shortcomings with your current pipeline
 
-
-One potential shortcoming would be what would happen when 
-
 The biggest shortcoming I think is that color select criterion is hard code.
-It really restrict to fit only on the simple situation the homework provided for us.
+Though it dramatically improve the stablity of two lane lines, it really restrict to fit only on the simple situation the homework provided for us.
+
+* Following picture show the situation of applying grayscale and colorselect on challenge.mp4.
+
+![image6]
+![image7]
+![image8]
+![image9]
 
 Imagine when the car pass through the lane with no street lamp in the dark night, maybe the color select will accidently ignore white or yellow lanes.
 
@@ -106,8 +110,3 @@ And maybe we should come up with another algo to fit in the dark night, such as 
 I personally have no idea about how to deal with lane tranfer problem.
 
 For the last one, I think we should use computer vision and deep learning to first recognize the car in order to seperate it from our point collection algorithm.
-
-
-
-
-Another potential improvement could be to ...

@@ -86,7 +86,7 @@ two y coordinate are:
 
 ### 2. Identify potential shortcomings with your current pipeline
 
-The biggest shortcoming I think is that color select criterion is hard code.
+(1) The biggest shortcoming I think is that color select criterion is hard code.
 Though it dramatically improve the stablity of two lane lines, it really restrict to fit only on the simple situation the homework provided for us.
 
 * Following picture show the situation of applying grayscale and colorselect on challenge.mp4.
@@ -96,16 +96,19 @@ Though it dramatically improve the stablity of two lane lines, it really restric
 ![image8]
 ![image9]
 
-Imagine when the car pass through the lane with no street lamp in the dark night, maybe the color select will accidently ignore white or yellow lanes.
+**Imagine when the car pass through the lane in the dark night without streetlamps, maybe the color select will accidently ignore white or yellow lanes.**
 
-Another shortcomings might happen if there is the situation to change onto another lane, then my current pipeline will be broken.
+(2) Another shortcomings might happen if there is the situation to change onto another lane, then my current pipeline will be broken.
 
-Also when it comes to the other car right before our car, I believe the the average algorithm I use would definitely affected by it.
+(3) Also when it comes to the other car right before our car, I believe the the average algorithm I use would definitely affected by it.
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement on the biggest shortcoming would be to totally give up color selection and consider only grayscale.
-And maybe we should come up with another algo to fit in the dark night, such as to scan over each row of roi region to find out the point where the pixel intensity dramatically get high and low, that might be the bright white lane line or bright yellow lane line which in relation to dark ground, and accordingly find out the point collection on lane lines.
+A possible improvement on the biggest shortcoming would be to totally **give up color selection and consider only grayscale.**
+And maybe **we should come up with another algo to fit in the dark night**, such as to 
+**scan over each row of roi region to find out the point where the pixel intensity dramatically get high and low**, 
+that might be the bright white points or bright yello points belong to lane line which in relation to dark ground, 
+and accordingly find out the point collection on lane lines.
 
 I personally have no idea about how to deal with lane tranfer problem.
 

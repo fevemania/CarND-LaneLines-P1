@@ -14,14 +14,14 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./examples/grayscale.jpg "Grayscale"
-[image2]: ./demo/roi_before_canny_1.jpg
-[image3]: ./demo/roi_before_canny_2.jpg
-[image4]: ./demo/roi_after_canny_1.jpg
-[image5]: ./demo/roi_after_canny_2.jpg
-[image6]: ./demo/apply_grayscale_1.jpg
-[image7]: ./demo/apply_grayscale_2.jpg
-[image8]: ./demo/apply_color_select_1.jpg
-[image9]: ./demo/apply_color_select_2.jpg
+[image2]: ./demo/roi_before_canny_1.png
+[image3]: ./demo/roi_before_canny_2.png
+[image4]: ./demo/roi_after_canny_1.png
+[image5]: ./demo/roi_after_canny_2.png
+[image6]: ./demo/apply_grayscale_1.png
+[image7]: ./demo/apply_grayscale_2.png
+[image8]: ./demo/apply_color_select_1.png
+[image9]: ./demo/apply_color_select_2.png
 
 ---
 

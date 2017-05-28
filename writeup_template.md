@@ -29,7 +29,7 @@ The goals / steps of this project are the following:
 
 ### Q1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 ---
-### A1. My pipeline consisted of 8 steps. 
+### A1. My pipeline consisted of 6 steps. 
 
 (1) First, I set all global parameters used in following function at the beginning.
 
@@ -37,8 +37,11 @@ The goals / steps of this project are the following:
 Because the roi region should change according to the resolution of input image; for instance, test_image and previous two video both are 960*540, but
 challenge.mp4 is 1280*720**
 
-    color_roi = np.dstack((roi, roi, roi))
-    return weighted_img(edges_with_lines, color_roi)
+    img_shape = img.shape
+    roi_y_top = img_shape[0]*0.6   # set the top border for draw lane
+    mid_x = img_shape[1]/2         # midden position of x coordinate in the given image
+    offset = 10
+    vertices = np.array([[(0,img_shape[0]),(mid_x - offset, roi_y_top), (mid_x + offset, roi_y_top), (img_shape[1],img_shape[0])]], dtype=np.int32)
 
 (2) Then I convert the color space of original image from RGB to GRAYSCALE. (Or to the particular range of our color select).
 
@@ -53,31 +56,36 @@ challenge.mp4 is 1280*720**
 ![image4]
 ![image5]
 
+**Note: It really helpful to generate roi with both line image and edge to get the idea of what vision our computer really see.**
+
+    color_roi = np.dstack((roi, roi, roi))
+    return weighted_img(edges_with_lines, color_roi)
+
 (5) After selecting roi, It is time to draw line on it!
 
-*** In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ***
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by
 
 * first, seperate points into two collections, point_in_positive_slope and point_in_negative_slope
 
-And the Tricky method I use is to set the positive boundary equals to 30, and negative boundary equals to -30, only slope above 30 would be added into positive collection, and the slopes below -30 added into negative collection.
+**(Tricky method) I set the positive boundary equals to 30, and negative boundary equals to -30, 
+only slope above 30 would be added into positive collection, and the slopes below -30 added into negative collection.**
 
     # manually select the slope boundary (tricky method)
     positive_degree_bound = 30 / 180 * np.pi
     negative_degree_bound = (-30) / 180 * np.pi
-    
 
 * further, I seperate x and y of each of two collections, form px (the set of x coordinates belong to point_in_positive_slope),   
     py (the set of y coordinates belong to point_in_positive_slope), nx (the set of y coordinates belong to point_in_negative_slope), ny (the set of y coordinates belong to point_negative_slope).
     
 * use np.polyfit to calculate average slope and intercept on negative and positive point collection. And This is how I extrapolate the line.
 
-* then I need to find two point to form positive slope line and the other two point to form negative slope line.
-    
-    In order to draw full line with no broken point, I select two y coordicate to reversely calculate corespond x coordinate.
-two y coordinate are: 
+* Find two points to form positive slope line and the other two points to form negative slope line.
 
-  (a) first y is at the botton of image 
-  (b) second y times 0.6 from first y
+**In order to draw full line with no broken point, I select two y coordicate to reversely calculate corespond x coordinate.**
+ two y coordinate are: 
+
+    (a) first y is at the botton of image 
+    (b) second y times 0.6 from first y
 
 (6) After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
 

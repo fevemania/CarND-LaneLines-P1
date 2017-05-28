@@ -14,41 +14,60 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./examples/grayscale.jpg "Grayscale"
+[image2]: ./demo/roi_before_canny_1.jpg
+[image3]: ./demo/roi_before_canny_2.jpg
+[image4]: ./demo/roi_after_canny_1.jpg
+[image5]: ./demo/roi_after_canny_2.jpg
 
 ---
 
 ### Reflection
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+### Q1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+---
+### A1. My pipeline consisted of 8 steps. 
 
-My pipeline consisted of 8 steps. 
-
-* First, I set all global parameters used in following function at the beginning.
+(1) First, I set all global parameters used in following function at the beginning.
 
 **Notably, it's important to put both image.shape and the calculation of vertices for roi in the process_img function.
-Because the roi region need to change dynamically accordingly to the resolution of input image.**
+Because the roi region should change according to the resolution of input image; for instance, test_image and previous two video both are 960*540, but
+challenge.mp4 is 1280*720**
 
-* Then I convert the color space of original image from RGB to GRAYSCALE. (Or to the particular range of our color select).
-* Do guassian blur to reduce noise.
-* After that the canny algorithm come in to extract edges according two thresholds.
+    color_edges = np.dstack((edges, edges, edges))
+    return weighted_img(edges_with_lines, img)
+
+(2) Then I convert the color space of original image from RGB to GRAYSCALE. (Or to the particular range of our color select).
+
+(3) Do guassian blur to reduce noise.
+
+(4) After that the canny algorithm come in to extract edges according two thresholds.
 
 **Notably, I was once try to split roi before do other matrix manipulations like blur or canny, but it seems like the canny algo will extract the edge of roi borders.**
 
+![image2]
+![image3]
+![image4]
+![image5]
 
-* After selecting roi, It is time to draw line on it!
+(5) After selecting roi, It is time to draw line on it!
 
 *** In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ***
 
-(1) first, seperate points into two collections, point_in_positive_slope and point_in_negative_slope
+* first, seperate points into two collections, point_in_positive_slope and point_in_negative_slope
 
-    And the Tricky method I use is to set the positive boundary equals to 30, and negative boundary equals to -30, only slope above 30 would be added into positive collection, and the slopes below -30 added into negative collection.
+And the Tricky method I use is to set the positive boundary equals to 30, and negative boundary equals to -30, only slope above 30 would be added into positive collection, and the slopes below -30 added into negative collection.
 
-(2) further, I seperate x and y of each of two collections, form px (the set of x coordinates belong to point_in_positive_slope),   
+    # manually select the slope boundary (tricky method)
+    positive_degree_bound = 30 / 180 * np.pi
+    negative_degree_bound = (-30) / 180 * np.pi
+    
+
+* further, I seperate x and y of each of two collections, form px (the set of x coordinates belong to point_in_positive_slope),   
     py (the set of y coordinates belong to point_in_positive_slope), nx (the set of y coordinates belong to point_in_negative_slope), ny (the set of y coordinates belong to point_negative_slope).
     
-(3) use np.polyfit to calculate average slope and intercept on negative and positive point collection. And This is how I extrapolate the line.
+* use np.polyfit to calculate average slope and intercept on negative and positive point collection. And This is how I extrapolate the line.
 
-(4) then I need to find two point to form positive slope line and the other two point to form negative slope line.
+* then I need to find two point to form positive slope line and the other two point to form negative slope line.
     
     In order to draw full line with no broken point, I select two y coordicate to reversely calculate corespond x coordinate.
 two y coordinate are: 
@@ -56,12 +75,13 @@ two y coordinate are:
   (a) first y is at the botton of image 
   (b) second y times 0.6 from first y
 
-* After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
+(6) After draw line on roi, use cv2.addWeighted method to linearly blend roi_with_line and original_img with RGB color space
 
 If you'd like to include images to show how the pipeline works, here is how to include an image: 
 
 
-![alt text][image1]
+<!--![alt text][image1]-->
+
 
 
 ### 2. Identify potential shortcomings with your current pipeline
